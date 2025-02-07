@@ -226,9 +226,9 @@ def calculate_score(
         ratio = round(float(her2 / chr17), 4)
 
         score = round((
-            0.30 * her2_score + 
-            0.90 * chr17_score + 
-            0.40 * ratio_score +
+            1 * her2_score + 
+            1 * chr17_score + 
+            1 * ratio_score +
             1 * area_score + 
             1 * sphericity_score
         ), 6)
