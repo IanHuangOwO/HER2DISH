@@ -21,6 +21,9 @@ class MainPanel(tk.Tk):
         
         self.protocol("WM_DELETE_WINDOW", self._check_close)
         
+        # Setup Variable
+        self.selected_path = None
+        
         # Loading Frame
         self.loading_frame = tk.Frame(self, bg="#202020")
         
@@ -224,14 +227,11 @@ class Topmenu(tk.Frame):
 
         match name:
             case 'Open Folder':
-                self.window.input_path = filedialog.askdirectory()
+                self.window.selected_path = filedialog.askdirectory()
                 self.window.select_image.update_roots(
                     name= 'select_image_treeview', 
-                    path= Path(self.window.input_path),
+                    path= Path(self.window.selected_path),
                 )
-                
-            case 'Select Output':
-                self.window.output_path = filedialog.askdirectory()
                 
             case 'Tutorial':
                 messagebox.showinfo("Tutorial", "This is a tutorial message.")
@@ -331,9 +331,7 @@ class SelectImagePanel(tk.Frame):
         if not file_path.is_file():
             return
         if file_path.suffix in ('.tif', '.tiff', '.jpg', '.png'):
-            self.window.input_path = file_path.parent.absolute()
-            self.window.output_path = self.window.input_path.parent.absolute()
-            self.window.image_display.input_path(str(file_path))
+            self.window.image_display.input_image_path(str(file_path))
     
     def update_tree(self, event):
         """

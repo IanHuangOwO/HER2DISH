@@ -151,7 +151,7 @@ class ImageDisplayPanel(tk.Frame):
         self.canvas.bind("<Enter>", self.canvas.master.focus_set())
         self.canvas.bind("<Leave>", self.canvas.focus_set())
         
-    def input_path(self, path: str) -> None:
+    def input_image_path(self, path: str) -> None:
         self.path = Path(path)
         self.name = self.path.stem
         

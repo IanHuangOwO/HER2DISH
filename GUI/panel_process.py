@@ -309,25 +309,12 @@ class FirstPanel(tk.Frame):
         # train_classifier_button.grid(row=4, column=0, pady=20)
         
         # Train Classifier
-        exit_button = tk.Button(
-            master=button_frame,
-            text='Exit',
-            font=button_font,
-            bg=button_background,
-            fg=button_foreground,
-            activebackground=active_background,
-            activeforeground=active_foreground,
-            width=button_width,
-            height=button_height,
-            borderwidth=0, 
-            highlightthickness=0,
-            command=lambda args='EXIT': self.process(args),
-        )
-        exit_button.grid(row=5, column=0, pady=20)
         
-    def process(self, name: str) -> None:
+    def process(self, name: str) -> None: 
         match name:
             case 'SMI':
+                if self.window.selected_path == None:
+                    return messagebox.showwarning('Warning', f'Please open a file.') 
                 self.window.loading_screen.show()
                 threading.Thread(target=self.SMI).start()
             
@@ -344,18 +331,10 @@ class FirstPanel(tk.Frame):
             case 'TRAIN':
                 pass
             
-            case 'EXIT':
-                response = messagebox.askquestion(
-                    "Question", 
-                    "Are you sure you want to exit?"
-                )
-                if response == 'yes': 
-                    self.window.destroy()
-            
     def SMI(self) -> None:
         self.window.cargo = load_cargo(
-            input_path = self.window.input_path,
-            output_path= self.window.output_path,
+            input_path= self.window.selected_path,
+            output_path= self.window.selected_path.parent.absolute(),
         )
         self.window.select_image.update_roots(
             name= 'current_image_treeview', 
