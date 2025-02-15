@@ -172,7 +172,7 @@ class ImageDisplayPanel(tk.Frame):
         
         self.update_image()
         
-    def input_cell(self, cell_id: int, name: str) -> None:
+    def input_image_cell(self, cell_id: int, name: str) -> None:
         self.cell_id = cell_id
         self.name = name
         

@@ -227,10 +227,10 @@ class Topmenu(tk.Frame):
 
         match name:
             case 'Open Folder':
-                self.window.selected_path = filedialog.askdirectory()
+                self.window.selected_path = Path(filedialog.askdirectory())
                 self.window.select_image.update_roots(
                     name= 'select_image_treeview', 
-                    path= Path(self.window.selected_path),
+                    path= self.window.selected_path,
                 )
                 
             case 'Tutorial':
@@ -341,13 +341,8 @@ class SelectImagePanel(tk.Frame):
         node = tree.focus()
         self._populate_tree(tree, node)
 
-    def update_roots(self, name, path):
+    def update_roots(self, name, path= None):
         """Populates the tree view with the root directory."""
-        if path.is_file():
-            path = path.parent
-        elif not path.is_dir():
-            return
-        
         if name == 'select_image_treeview':
             tree = self.select_image_treeview
         elif name == 'current_image_treeview':
@@ -355,6 +350,13 @@ class SelectImagePanel(tk.Frame):
             
         for item in tree.get_children():
             tree.delete(item)
+        
+        if path is None:
+            return
+        if path.is_file():
+            path = path.parent
+        elif not path.is_dir():
+            return
 
         tree.heading("#0", text=path.name, anchor='center')
         root_node = tree.insert('', 'end', text=path.name, values=[str(path), "directory"])

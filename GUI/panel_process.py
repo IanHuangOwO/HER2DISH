@@ -308,13 +308,26 @@ class FirstPanel(tk.Frame):
         # )
         # train_classifier_button.grid(row=4, column=0, pady=20)
         
-        # Train Classifier
+        # Anaylsis Preperation
+        reset_button = tk.Button(
+            master=button_frame,
+            text='Reset Analysis',
+            font=button_font,
+            bg=button_background,
+            fg=button_foreground,
+            activebackground=active_background,
+            activeforeground=active_foreground,
+            width=button_width,
+            height=button_height,
+            borderwidth=0, 
+            highlightthickness=0,
+            command=lambda args='RESET': self.process(args),
+        )
+        reset_button.grid(row=4, column=0, pady=20)
         
     def process(self, name: str) -> None: 
         match name:
             case 'SMI':
-                if self.window.selected_path == None:
-                    return messagebox.showwarning('Warning', f'Please open a file.') 
                 self.window.loading_screen.show()
                 threading.Thread(target=self.SMI).start()
             
@@ -331,7 +344,18 @@ class FirstPanel(tk.Frame):
             case 'TRAIN':
                 pass
             
+            case 'RESET':
+                self.window.loading_screen.show()
+                threading.Thread(target=self.RESET).start()
+            
     def SMI(self) -> None:
+        if self.window.selected_path == None:
+            self.window.selected_path = Path(filedialog.askdirectory())
+            self.window.select_image.update_roots(
+                name= 'select_image_treeview', 
+                path= self.window.selected_path
+            )
+        
         self.window.cargo = load_cargo(
             input_path= self.window.selected_path,
             output_path= self.window.selected_path.parent.absolute(),
@@ -351,6 +375,14 @@ class FirstPanel(tk.Frame):
         )
         
         self.parent.show_frame('PreprocessPanel')
+        self.window.loading_screen.hide()
+        
+    def RESET(self) -> None:
+        
+        self.window.select_image.update_roots(name= 'select_image_treeview')
+        self.window.select_image.update_roots(name= 'current_image_treeview')
+        self.window.image_display.canvas.delete(self.window.image_display.image_id)
+        
         self.window.loading_screen.hide()
         
 class SecondPanel(tk.Frame):
@@ -663,7 +695,7 @@ class ThirdPanel(tk.Frame):
         selected_item = tree.selection()
         if selected_item:
             name, cell_id, ratio, her2, chr17 = tree.item(selected_item[0])['values']
-            self.window.image_display.input_cell(cell_id, name)
+            self.window.image_display.input_image_cell(cell_id, name)
             self._update_number(ratio, her2, chr17)
             
         if len(self.window.cargo.final_cell_score) > 20:
@@ -903,7 +935,7 @@ class FourthPanel(tk.Frame):
         
         self.window.selected_cell_panel.remove_all_buttons()
         
-        self.window.image_display.input_path(str(self.window.cargo.report_path))
+        self.window.image_display.input_image_path(str(self.window.cargo.report_path))
         self.window.image_display._update_keybind('drag')
         del self.window.cargo
         
