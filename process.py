@@ -228,8 +228,12 @@ def process_parallel(
         }
         
         # Collect the results and update the cargo in the main process
-        temp = []
-        for _, future in calculator.items():
-            temp += future.result()
-            
-        cargo.all_cell_score = np.array(temp)
+        sorted_results = [future.result() for future in calculator.values()]
+        
+        import heapq
+
+        # Perform a k-way merge using heapq.merge()
+        sorted_temp = list(heapq.merge(*sorted_results, key=lambda x: -float(x[1])))
+
+        # Convert back to a NumPy array if needed
+        cargo.all_cell_score = np.array(sorted_temp)

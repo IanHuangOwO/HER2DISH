@@ -221,12 +221,12 @@ class CaseCargo:
         except Exception as e:
             raise ValueError(f"Error loading Excel file: {e}")
         
-        from tkinter import messagebox
-        response = messagebox.askquestion(
-            "Question", 
-            f"Found existing progress.\n\nDo you wish to load and continue ?"
-        )
-        if response == 'no': return
+        # from tkinter import messagebox
+        # response = messagebox.askquestion(
+        #     "Question", 
+        #     f"Found existing progress.\n\nDo you wish to load and continue ?"
+        # )
+        # if response == 'no': return
         
         temp = df.values.tolist()[1:21]
         
