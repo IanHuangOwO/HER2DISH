@@ -135,7 +135,9 @@ class CaseCargo:
         self.all_cell_excel_path: Path = self.output_path / f'{self.input_path.stem}_all-cell-score.xlsx'
         self.report_excel_path: Path = self.output_path / f'Final-Report_{self.input_path.stem}.xlsx'
         self.all_cell_score: List = []
-        self.final_cell_score: List = []
+        self.temp_cell_score: List = []
+        self.final_cell_score: Dict = {}
+        self.final_cell_image: Dict = {}
         # Ensure the input path exists
         if not self.input_path.exists():
             raise ValueError(f"Input path {self.input_path} does not exist.")
@@ -221,22 +223,17 @@ class CaseCargo:
         except Exception as e:
             raise ValueError(f"Error loading Excel file: {e}")
         
-        # from tkinter import messagebox
-        # response = messagebox.askquestion(
-        #     "Question", 
-        #     f"Found existing progress.\n\nDo you wish to load and continue ?"
-        # )
-        # if response == 'no': return
+        
         
         temp = df.values.tolist()[1:21]
         
         if len(temp[0]) > 3:
-            self.final_cell_score = [None] * 40
+            self.temp_cell_score = [None] * 40
             for idx, element in enumerate(temp):
-                self.final_cell_score[idx] = element[:3]
-                self.final_cell_score[idx + 20] = element[3:]
+                self.temp_cell_score[idx] = element[:3]
+                self.temp_cell_score[idx + 20] = element[3:]
                 
         else:
-            self.final_cell_score = temp
+            self.temp_cell_score = temp
             
         
