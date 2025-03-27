@@ -95,8 +95,8 @@ class TrainPanel(tk.Frame):
         resulting_mask = future.predict_segmenter(features, self.clf)
 
         # Define color mappings
-        HER2_COLOR = [0, 255, 0]   # Green for HER2
-        CHR17_COLOR = [0, 200, 255] # Orange for Chr17
+        foreground_COLOR = [255, 0, 0]   # Green for HER2
+        background_COLOR = [0, 200, 255] # Orange for Chr17
 
         # Update masks based on predictions
         foreground_mask[resulting_mask == 2] = 255
@@ -104,10 +104,10 @@ class TrainPanel(tk.Frame):
 
         # Convert to color and apply HER2 & Chr17 overlays
         foreground_mask = cv2.cvtColor(foreground_mask.astype(np.uint8), cv2.COLOR_GRAY2BGR)
-        foreground_mask[np.all(foreground_mask == [255, 255, 255], axis=-1)] = HER2_COLOR
+        foreground_mask[np.all(foreground_mask == [255, 255, 255], axis=-1)] = foreground_COLOR
 
         background_mask = cv2.cvtColor(background_mask.astype(np.uint8), cv2.COLOR_GRAY2BGR)
-        background_mask[np.all(background_mask == [255, 255, 255], axis=-1)] = CHR17_COLOR
+        background_mask[np.all(background_mask == [255, 255, 255], axis=-1)] = background_COLOR
 
         # Store result
         train_display.resulting_mask = foreground_mask + background_mask

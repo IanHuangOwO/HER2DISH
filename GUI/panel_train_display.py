@@ -111,7 +111,7 @@ class TrainDisplayPanel(tk.Frame):
     def _update_image(self) -> None:
         if self.show_foreground: display_img = cv2.addWeighted(self.display_img, 1, self.foreground_mask, 0.5, 0)
         elif self.show_background: display_img = cv2.addWeighted(self.display_img, 1, self.background_mask, 0.5, 0)
-        elif self.show_all: display_img = cv2.addWeighted(self.display_img, 1, self.resulting_mask, 0.5, 0)
+        elif self.show_all: display_img = cv2.addWeighted(self.display_img, 1, self.resulting_mask, 0.2, 0)
         else: display_img = self.display_img
         
         height, width = display_img.shape[:2]
@@ -217,7 +217,7 @@ class TrainDisplayPanel(tk.Frame):
         self.canvas_mask = cv2.resize(current_mask.copy(),(int(width * self.scale), int(height * self.scale)),interpolation=cv2.INTER_AREA)
         
     def _start_draw(self, _):
-        if self.show_foreground: self.color = [0, 255, 0]
+        if self.show_foreground: self.color = [255, 0, 0]
         else: self.color = [0, 200, 255]
         self.size = int(self.entry_size.get())
             
